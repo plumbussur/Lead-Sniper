@@ -7,7 +7,7 @@ from typing import List
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def main():
-    print("🔍 Отладка: Проверяем пути...")
+    print("Отладка: Проверяем пути...")
     print(f"   Текущая директория: {os.getcwd()}")
     print(f"   Файл main.py: {os.path.abspath(__file__)}")
     print(f"   Родительская директория: {os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}")
@@ -22,7 +22,7 @@ def main():
     
     args = parser.parse_args()
     
-    print(f"🔍 Отладка: Аргументы - {args}")
+    print(f"Отладка: Аргументы - {args}")
     
     try:
         if args.collect:
@@ -32,16 +32,16 @@ def main():
         else:
             collect_and_process_data(args.output, args.sources)
     except Exception as e:
-        print(f"❌ Критическая ошибка: {e}")
-        print("🔍 Полная трассировка:")
+        print(f"Критическая ошибка: {e}")
+        print("Полная трассировка:")
         traceback.print_exc()
 
 def collect_and_process_data(output_path: str, sources: List[str]):
-    print("🚀 Начинаем сбор и обработку данных...")
+    print("Начинаем сбор и обработку данных...")
     
     output_dir = os.path.dirname(output_path)
     if output_dir and not os.path.exists(output_dir):
-        print(f"📁 Создаем директорию: {output_dir}")
+        print(f"Создаем директорию: {output_dir}")
         os.makedirs(output_dir)
     
     try:
@@ -57,71 +57,71 @@ def collect_and_process_data(output_path: str, sources: List[str]):
         all_companies = []
         
         if 'rusprofile' in sources or 'all' in sources:
-            print("\n📊 Сбор данных с Rusprofile...")
+            print("\nСбор данных с Rusprofile...")
             rusprofile_collector = RusprofileCollector()
             rusprofile_companies = rusprofile_collector.collect_companies()
             all_companies.extend(rusprofile_companies)
             print(f"   Найдено компаний: {len(rusprofile_companies)}")
         
         if 'catalog' in sources or 'all' in sources:
-            print("\n📚 Сбор данных из каталогов...")
+            print("\nСбор данных из каталогов...")
             catalog_scanner = CatalogScanner()
             catalog_companies = catalog_scanner.collect_companies()
             all_companies.extend(catalog_companies)
             print(f"   Найдено компаний: {len(catalog_companies)}")
         
-        print(f"🔍 Отладка: Всего собрано компаний: {len(all_companies)}")
+        print(f"Отладка: Всего собрано компаний: {len(all_companies)}")
         
         if not all_companies:
-            print("❌ Не удалось собрать данные из указанных источников")
-            print("📝 Создаем демонстрационный файл...")
+            print("Не удалось собрать данные из указанных источников")
+            print("Создаем демонстрационный файл...")
             create_demo_file(output_path)
             return
         
-        print("\n🧹 Очистка данных...")
+        print("\nОчистка данных...")
         cleaned_companies = DataCleaner.clean_company_data(all_companies)
         print(f"   После очистки: {len(cleaned_companies)}")
         
-        print("\n💰 Фильтрация по выручке...")
+        print("\nФильтрация по выручке...")
         revenue_filtered = RevenueValidator.filter_by_revenue(cleaned_companies)
         print(f"   После фильтрации по выручке: {len(revenue_filtered)}")
         
-        print("\n🤖 Классификация по CAT-системам...")
+        print("\nКлассификация по CAT-системам...")
         cat_classified = CatClassifier.classify_companies(revenue_filtered)
         print(f"   После классификации CAT: {len(cat_classified)}")
         
         if not cat_classified:
-            print("⚠️  Компании после фильтрации отсутствуют. Создаем демонстрационные данные...")
+            print("Компании после фильтрации отсутствуют. Создаем демонстрационные данные...")
             create_demo_file(output_path)
             return
         
-        print("\n🌐 Анализ сайтов компаний...")
+        print("\nАнализ сайтов компаний...")
         website_parser = WebsiteParser()
         final_companies = website_parser.analyze_multiple_companies(cat_classified)
         
-        print("\n✨ Улучшение доказательств CAT...")
+        print("\nУлучшение доказательств CAT...")
         enhanced_companies = CatClassifier.enhance_cat_evidence(final_companies)
         
-        print(f"\n💾 Сохранение результата в {output_path}...")
-        print(f"🔍 Отладка: Путь к файлу: {os.path.abspath(output_path)}")
+        print(f"\nСохранение результата в {output_path}...")
+        print(f"Отладка: Путь к файлу: {os.path.abspath(output_path)}")
         
         CsvHandler.save_companies_to_csv(enhanced_companies, output_path)
         
         if os.path.exists(output_path):
             file_size = os.path.getsize(output_path)
-            print(f"✅ Файл успешно создан! Размер: {file_size} байт")
+            print(f"Файл успешно создан! Размер: {file_size} байт")
         else:
-            print(f"❌ Файл не был создан по пути: {output_path}")
+            print(f"Файл не был создан по пути: {output_path}")
         
-        print("\n✅ Анализ завершен!")
-        print(f"📈 Итоговый результат: {len(enhanced_companies)} компаний")
+        print("\nАнализ завершен!")
+        print(f"Итоговый результат: {len(enhanced_companies)} компаний")
         
     except Exception as e:
-        print(f"❌ Ошибка в процессе обработки: {e}")
-        print("🔍 Полная трассировка:")
+        print(f"Ошибка в процессе обработки: {e}")
+        print("Полная трассировка:")
         traceback.print_exc()
         
-        print("📝 Создаем демонстрационный файл...")
+        print("Создаем демонстрационный файл...")
         create_demo_file(output_path)
 
 def create_demo_file(output_path: str):
@@ -173,41 +173,41 @@ def create_demo_file(output_path: str):
         df = pd.DataFrame(demo_data)
         df.to_csv(output_path, index=False, encoding='utf-8')
         
-        print(f"✅ Демонстрационный файл создан: {output_path}")
+        print(f"Демонстрационный файл создан: {output_path}")
         
     except Exception as e:
-        print(f"❌ Ошибка при создании демонстрационного файла: {e}")
+        print(f"Ошибка при создании демонстрационного файла: {e}")
 
 def analyze_existing_data(csv_path: str):
-    print(f"📊 Анализ существующих данных из {csv_path}...")
+    print(f"Анализ существующих данных из {csv_path}...")
     
     try:
         from src.utils.csv_handler import CsvHandler
         
         companies = CsvHandler.load_companies_from_csv(csv_path)
         if not companies:
-            print("❌ Не удалось загрузить данные")
+            print("Не удалось загрузить данные")
             return
         
-        print(f"📋 Загружено компаний: {len(companies)}")
+        print(f"Загружено компаний: {len(companies)}")
         
         revenues = [c.revenue for c in companies if c.revenue]
         if revenues:
-            print(f"💰 Средняя выручка: {sum(revenues) / len(revenues):,.0f} ₽")
-            print(f"💰 Максимальная выручка: {max(revenues):,.0f} ₽")
-            print(f"💰 Минимальная выручка: {min(revenues):,.0f} ₽")
+            print(f"Средняя выручка: {sum(revenues) / len(revenues):,.0f} ₽")
+            print(f"Максимальная выручка: {max(revenues):,.0f} ₽")
+            print(f"Минимальная выручка: {min(revenues):,.0f} ₽")
         
         sources = {}
         for company in companies:
             source = company.source
             sources[source] = sources.get(source, 0) + 1
         
-        print("\n📊 Статистика по источникам:")
+        print("\nСтатистика по источникам:")
         for source, count in sources.items():
             print(f"   {source}: {count}")
             
     except Exception as e:
-        print(f"❌ Ошибка при анализе данных: {e}")
+        print(f"Ошибка при анализе данных: {e}")
 
 if __name__ == "__main__":
     main()
