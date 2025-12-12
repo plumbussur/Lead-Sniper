@@ -1,0 +1,2 @@
+[console_scripts]
+cat-analyzer = src.main:main
